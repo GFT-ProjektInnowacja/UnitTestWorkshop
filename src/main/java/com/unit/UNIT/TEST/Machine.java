@@ -10,19 +10,19 @@ public class Machine {
     public static final int WINNING_NUMBER = 7;
     public List<Integer> gameSigns;
     public int bankAmount = 10000;
-//    public Validator validator;
+    public Validator validator;
 
-    public Machine(/*Validator validator*/){
- //       this.validator = validator;
+    public Machine(Validator validator){
+        this.validator = validator;
     }
 
     public void insertCoin(Money money) {
- //       if (validator.validateMoney(money)) {
+        if (validator.validateMoney(money)) {
             bankAmount = bankAmount + money.value;
             startGame();
-/*      } else {
+        } else {
             System.out.println("Invalid Coin");
-        }*/
+        }
 
     }
 
