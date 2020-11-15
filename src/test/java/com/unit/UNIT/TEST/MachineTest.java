@@ -9,9 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -108,5 +109,55 @@ class MachineTest {
         //then
         assertEquals(finalResult, machine.bankAmount);
         verify(validator,times(1)).validateMoney(money);
+    }
+
+    @Test
+    public void shouldPlayerLose() {
+        //given
+        machine.gameSigns = IntStream.of(1, 2, 3, 4, 5).boxed().collect(Collectors.toList());
+        //when
+        machine.checkWin();
+        //then
+        assertFalse(machine.checkWin());
+    }
+
+    @Test
+    public void shouldAssignFiveToBankAmount() {
+        //given
+        Money money = new Money(5);
+        when(validator.validateMoney(money)).thenReturn(true);
+        int expectedAmount = 5;
+        //when
+        machine.winInfo(); // Zeroes bank amount
+        machine.insertCoin(money);
+        //then
+        assertEquals(expectedAmount, machine.bankAmount);
+    }
+
+    @Test
+    public void shouldBankAmountRemainTheSameWhenUsingInvalidCoins() {
+        // given
+        List<Money> coins = IntStream.range(10, 20).limit(10).boxed().map(Money::new).collect(Collectors.toList());
+        int expectedAmount = 10_000;
+        // when
+        coins.forEach(c -> machine.insertCoin(c));
+        // then
+        assertEquals(expectedAmount, machine.bankAmount);
+    }
+
+    @Test
+    public void shouldHaveNoListOfSignsAfterConstruct() {
+        // given - nothing
+        // when - nothing happened
+        // then
+        assertNull(machine.gameSigns);
+    }
+
+    @Test
+    public void shouldAssignValidatorAfterConstruct() {
+        // given - nothing
+        // when - nothing happened
+        // then
+        assertNotNull(machine.validator);
     }
 }
