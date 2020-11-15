@@ -135,7 +135,7 @@ class MachineTest {
     }
 
     @Test
-    public void shouldBankAmountRemainTheSame() {
+    public void shouldBankAmountRemainTheSameWhenUsingInvalidCoins() {
         // given
         List<Money> coins = IntStream.range(10, 20).limit(10).boxed().map(Money::new).collect(Collectors.toList());
         int expectedAmount = 10_000;
@@ -143,7 +143,6 @@ class MachineTest {
         coins.forEach(c -> machine.insertCoin(c));
         // then
         assertEquals(expectedAmount, machine.bankAmount);
-
     }
 
     @Test
