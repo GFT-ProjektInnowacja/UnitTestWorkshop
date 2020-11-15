@@ -62,7 +62,7 @@ class MachineTest {
     }
 
     @Test
-    public void shouldFiveElementsInList() {
+    public void shouldBeFiveElementsInTheList() {
         //given
         int numberOfElements = 5;
         //when
@@ -72,17 +72,16 @@ class MachineTest {
     }
 
     @Test
-    public void shouldElementsFromZeroToNine() {
+    public void shouldBeElementsFromZeroToNineInTheList() {
         //given
-        CheckNumberTest checkTest = new CheckNumberTest();
         //when
         machine.generateThreeSigns();
         //then
-        assertTrue(checkTest.check(machine.gameSigns));
+        assertTrue(checkListItem(machine.gameSigns));
     }
 
     @Test
-    public void shouldPlayerWin() {
+    public void shouldPlayerWinWithFiveSevens() {
         //given
         List<Integer> mockList = new ArrayList<>();
         mockList.add(7);
@@ -108,5 +107,12 @@ class MachineTest {
         //then
         assertEquals(finalResult, machine.bankAmount);
         verify(validator,times(1)).validateMoney(money);
+    }
+
+    private boolean checkListItem(List<Integer> gameSigns) {
+        for(Integer x : gameSigns) {
+            if(x < 0 || x > 9) return false;
+        }
+        return true;
     }
 }
