@@ -134,4 +134,31 @@ class MachineTest {
         assertEquals(expectedAmount, machine.bankAmount);
     }
 
+    @Test
+    public void shouldBankAmountRemainTheSame() {
+        // given
+        List<Money> coins = IntStream.range(10, 20).limit(10).boxed().map(Money::new).collect(Collectors.toList());
+        int expectedAmount = 10_000;
+        // when
+        coins.forEach(c -> machine.insertCoin(c));
+        // then
+        assertEquals(expectedAmount, machine.bankAmount);
+
+    }
+
+    @Test
+    public void shouldHaveNoListOfSignsAfterConstruct() {
+        // given - nothing
+        // when - nothing happened
+        // then
+        assertNull(machine.gameSigns);
+    }
+
+    @Test
+    public void shouldAssignValidatorAfterConstruct() {
+        // given - nothing
+        // when - nothing happened
+        // then
+        assertNotNull(machine.validator);
+    }
 }
