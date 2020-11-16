@@ -10,8 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -108,5 +107,64 @@ class MachineTest {
         //then
         assertEquals(finalResult, machine.bankAmount);
         verify(validator,times(1)).validateMoney(money);
+    }
+
+    @Test
+    public void shouldIncreaseAmountOfMoneyByTwo() {
+        //given
+        Money money = new Money(2);
+        int finalResult = 10002;
+        when(validator.validateMoney(money)).thenReturn(true);
+        //when
+        machine.insertCoin(money);
+        //then
+        assertEquals(finalResult, machine.bankAmount);
+        verify(validator, times(1)).validateMoney(money);
+    }
+
+    @Test
+    public void shouldGameBeLost() {
+        //given
+        List<Integer> list = new ArrayList<>();
+        list.add(2);
+        list.add(2);
+        list.add(2);
+        list.add(2);
+        list.add(2);
+        list.add(2);
+        machine.gameSigns = list;
+        //when
+        machine.checkWin();
+        //then
+        assertFalse(machine.checkWin());
+    }
+
+    @Test
+    public void shouldClearBankAmount() {
+        //given
+        int expectedValue = 0;
+        //when
+        machine.winInfo();
+        //then
+        assertEquals(expectedValue, machine.bankAmount);
+    }
+
+    @Test
+    public void shouldReturnInvalidCoinMessage() {
+        //given
+        Money money = new Money(3);
+        //when
+        machine.insertCoin(money);
+        //then
+        assertFalse(validator.validateMoney(money));
+    }
+
+    @Test
+    public void shouldGenerateFiveSigns() {
+        //given
+        //when
+        machine.generateThreeSigns();
+        //then
+        assertEquals(5, machine.gameSigns.size());
     }
 }
