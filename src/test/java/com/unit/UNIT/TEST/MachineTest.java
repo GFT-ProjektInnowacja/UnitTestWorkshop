@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -108,5 +109,52 @@ class MachineTest {
         //then
         assertEquals(finalResult, machine.bankAmount);
         verify(validator,times(1)).validateMoney(money);
+    }
+
+    @Test
+    public void shouldGenerateThreeGameSigns() {
+        //given
+        int numberOfGameSigns = 3;
+        //when
+        machine.generateThreeSigns();
+        //then
+        assertEquals(numberOfGameSigns, machine.gameSigns.size());
+    }
+
+    @Test
+    public void shouldGenerateGameSignsInRangeFromZeroToNine() {
+        //given
+        int lowerBound = 0;
+        int upperBound = 9;
+        //when
+        machine.generateThreeSigns();
+        //then
+        machine.gameSigns.stream().forEach(gameSign -> {
+            assertTrue(gameSign >= lowerBound);
+            assertTrue(gameSign <= upperBound);
+        });
+    }
+
+    @Test
+    public void shouldNotStartGameWhenInsertedInvalidMoney() {
+        //given
+        Machine machineSpy = Mockito.spy(machine);
+        Money invalidMoney = new Money(0);
+        //when
+        machineSpy.insertCoin(invalidMoney);
+        //then
+        verify(machineSpy, times(0)).startGame();
+    }
+
+    @Test
+    public void shouldStartGame() {
+        //given
+        Machine machineSpy = Mockito.spy(machine);
+        Money money = new Money(4);
+        when(validator.validateMoney(money)).thenReturn(true);
+        //when
+        machineSpy.insertCoin(money);
+        //then
+        verify(machineSpy, times(1)).startGame();
     }
 }
