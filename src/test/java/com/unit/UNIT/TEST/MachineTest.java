@@ -129,10 +129,10 @@ class MachineTest {
         //when
         machine.generateThreeSigns();
         //then
-        for(int gameSign : machine.gameSigns) {
+        machine.gameSigns.stream().forEach(gameSign -> {
             assertTrue(gameSign >= lowerBound);
             assertTrue(gameSign <= upperBound);
-        }
+        });
     }
 
     @Test
